@@ -8,7 +8,7 @@ function ProjectsCommand() {
 
     return (
         <>
-            <p>- <span onClick={handleGithubLinkClick} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}>Click Here</span> to visit my GitHub profile</p>
+            <p>- <span onClick={handleGithubLinkClick} style={{ cursor: 'pointer', textDecoration: 'underline', color: '#6699cc' }}>Click Here</span> to visit my GitHub profile</p>
             {/* Add more projects as needed */}
         </>
     );

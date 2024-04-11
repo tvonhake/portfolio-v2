@@ -45,7 +45,7 @@ function Terminal() {
         const now = new Date();
         const timestamp = (
             <div>
-                <span style={{ color: 'blue' }}>{now.getDate()}</span>
+                <span style={{ color: '#6699cc' }}>{now.getDate()}</span>
                 <span style={{ color: 'green' }}>{now.toLocaleString('default', { month: 'long' })}</span>
                 <span style={{ color: 'red' }}>{now.getFullYear()}</span>
                 <span style={{ color: 'orange' }}>{now.toLocaleTimeString()}</span>
@@ -62,6 +62,7 @@ function Terminal() {
     
         let newOutputContent = [...outputContent]; // Create a copy of the current output content array
     
+        newOutputContent.push(<br />); // Add <br> after help command
         // Add the timestamp and last command to the output content
         newOutputContent.push(timestamp);
     
@@ -74,7 +75,6 @@ function Terminal() {
                     "- about",
                     "- contact"
                 );
-                newOutputContent.push(<br />); // Add <br> after help command
                 break;
             case 'projects':
                 newOutputContent.push(<ProjectsCommand />);
@@ -115,19 +115,23 @@ function Terminal() {
     useEffect(() => {
         // Focus on the input element when the component mounts
         inputRef.current.focus();
+    
+        let characterAdded = false;
 
-        // Refocus on command line if enter is pressed and command line is not focused
         const handleKeyPress = (event) => {
-            if (event.key === 'Enter' && !inputRef.current.contains(document.activeElement)) {
-                inputRef.current.focus(); // Refocus on the input
+            const key = event.key;
+
+            if (!inputRef.current.contains(document.activeElement) && (/^[a-zA-Z0-9]$/.test(key) || key === 'Enter')) {
+                inputRef.current.focus();
+            }
+
+            // Unfocus input if Escape key is pressed
+            if (key === 'Escape') {
+                inputRef.current.blur();
             }
         };
-    
+
         document.addEventListener('keydown', handleKeyPress);
-    
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress);
-        };
     
         // Function to handle clicks outside the terminal
         const handleClickOutside = (event) => {
@@ -139,8 +143,9 @@ function Terminal() {
         // Add event listener for clicks outside the terminal
         document.addEventListener('click', handleClickOutside);
     
-        // Clean up by removing the event listener when the component unmounts
+        // Clean up by removing the event listeners when the component unmounts
         return () => {
+            document.removeEventListener('keydown', handleKeyPress);
             document.removeEventListener('click', handleClickOutside);
         };
     }, []);
