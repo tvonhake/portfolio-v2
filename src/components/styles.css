@@ -1,0 +1,43 @@
+body {
+    background-color: #2c2c2c; /* Dark grey */
+}
+
+.terminal {
+    width: 80%;
+    margin: 50px auto;
+    background-color: #252525; /* Dark grey */
+    border: 2px solid #4caf50; /* Light green */
+    border-radius: 5px;
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace; /* Use a monospaced font */
+}
+
+.output {
+    padding: 10px;
+    min-height: 200px;
+    overflow-y: auto;
+}
+
+.output p {
+    margin: 0;
+    color: #6eff6e; /* Light green text for output */
+}
+
+.input {
+    display: flex;
+}
+
+.input span {
+    color: #6eff6e; /* Light green text for prompt */
+    padding: 10px;
+}
+
+.input input {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #e0e0e0; /* Light grey text for input */
+    font-family: 'Courier New', Courier, monospace; /* Use the same monospaced font */
+    font-size: 16px;
+    outline: none;
+}
