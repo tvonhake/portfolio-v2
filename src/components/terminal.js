@@ -103,11 +103,11 @@ function Terminal() {
             case 'lightmode':
                 newOutputContent.push("Are you sure you want to enable light mode? (y/n)");
                 break;
-            case 'github --open':
+            case 'github -open':
                 // Open GitHub link in a new tab
                 window.open('https://github.com/tvonhake', '_blank');
                 break;
-            case 'linkedin --open':
+            case 'linkedin -open':
                 // Open LinkedIn in a new tab
                 window.open('https://www.linkedin.com/in/trevorvonhake/', '_blank');
                 break;
@@ -162,8 +162,8 @@ function Terminal() {
                     'contact',
                     'clear',
                     'lightmode',
-                    'github --open',
-                    'linkedin --open',
+                    'github -open',
+                    'linkedin -open',
                     'help'
                 ];
     

@@ -7,7 +7,7 @@ function ProjectsCommand() {
 
     return (
         <>
-            <p>- <span onClick={handleGithubLinkClick} style={{ cursor: 'pointer', textDecoration: 'underline', color: '#6699cc' }}>Click Here</span> to visit my GitHub profile (or use command 'github --open')</p>
+            <p>- <span onClick={handleGithubLinkClick} style={{ cursor: 'pointer', textDecoration: 'underline', color: '#6699cc' }}>Click Here</span> to visit my GitHub profile (or use command 'github -open')</p>
         </>
     );
 }
