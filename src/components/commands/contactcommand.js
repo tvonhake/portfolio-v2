@@ -8,7 +8,7 @@ function ContactCommand() {
     return (
         <>
             <p><a href="mailto:tvonhake@outlook.com" style={{ cursor: 'pointer', textDecoration: 'underline', color: '#6699cc' }}>Email</a></p>
-            <p><span onClick={handleLinkedinLinkClick} style={{ cursor: 'pointer', textDecoration: 'underline', color: '#6699cc' }}>LinkedIn</span></p>
+            <p><span onClick={handleLinkedinLinkClick} style={{ cursor: 'pointer', textDecoration: 'underline', color: '#6699cc' }}>LinkedIn</span> (or use command 'linkedin --open')</p>
         </>
     );
 }

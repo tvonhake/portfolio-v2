@@ -8,7 +8,7 @@ import ContactCommand from './commands/contactcommand';
 function Terminal() {
     const [inputValue, setInputValue] = useState('');
     const [outputContent, setOutputContent] = useState([
-        "Welcome to Trevor's Portfolio",
+        "Welcome to Trevor von Hake's Portfolio",
         "Type 'help' for a list of commands."
     ]);
     const [commandHistory, setCommandHistory] = useState([]);
@@ -25,7 +25,11 @@ function Terminal() {
     const handleEnterPress = (event) => {
         if (event.key === 'Enter') {
             handleCommand(inputValue);
-            setCommandHistory([inputValue, ...commandHistory]); // Add the entered command to history
+            setCommandHistory(prevHistory => {
+                const updatedHistory = [...prevHistory, inputValue];
+                console.log('Updated command history:', updatedHistory);
+                return updatedHistory;
+            });
             setInputValue('');
             setHistoryIndex(-1); // Reset history index after submitting a new command
         } else if (event.key === 'ArrowUp') {
@@ -73,7 +77,12 @@ function Terminal() {
                     "- projects",
                     "- skills",
                     "- about",
-                    "- contact"
+                    "- contact",
+                    "- lightmode",
+                    "- clear",
+                    "- help",
+                    <br />,
+                    "NOTE: autocomplete is on, try it out! (type at least 3 chars, then tab)"
                 );
                 break;
             case 'projects':
@@ -90,6 +99,17 @@ function Terminal() {
                 break;
             case 'clear':
                 newOutputContent = [welcomeMessage]; // Clear all previous text except the welcome message
+                break;
+            case 'lightmode':
+                newOutputContent.push("Are you sure you want to enable light mode? (y/n)");
+                break;
+            case 'github --open':
+                // Open GitHub link in a new tab
+                window.open('https://github.com/tvonhake', '_blank');
+                break;
+            case 'linkedin --open':
+                // Open LinkedIn in a new tab
+                window.open('https://www.linkedin.com/in/trevorvonhake/', '_blank');
                 break;
             default:
                 newOutputContent.push("Command not found. Type 'help' for a list of commands.");
@@ -117,21 +137,65 @@ function Terminal() {
         inputRef.current.focus();
     
         let characterAdded = false;
-
+    
         const handleKeyPress = (event) => {
             const key = event.key;
-
+    
             if (!inputRef.current.contains(document.activeElement) && (/^[a-zA-Z0-9]$/.test(key) || key === 'Enter')) {
                 inputRef.current.focus();
             }
-
+    
             // Unfocus input if Escape key is pressed
             if (key === 'Escape') {
                 inputRef.current.blur();
             }
+    
+            // Autocomplete suggestions for each command
+            if (inputRef.current.value.length >= 3 && event.key === 'Tab') {
+                event.preventDefault(); // Prevent default tab behavior
+    
+                // Suggestions for each command
+                const suggestions = [
+                    'projects',
+                    'skills',
+                    'about',
+                    'contact',
+                    'clear',
+                    'lightmode',
+                    'github --open',
+                    'linkedin --open',
+                    'help'
+                    // Add more commands as needed
+                ];
+    
+                // Find the longest common prefix among suggestions and current input value
+                const prefix = suggestions.find(suggestion => suggestion.startsWith(inputRef.current.value.toLowerCase()));
+    
+                // Update input value with the autocompleted suggestion
+                if (prefix) {
+                    setInputValue(prefix);
+                }
+            }
         };
-
+    
+        const handleInputChange = (event) => {
+            const value = event.target.value.toLowerCase();
+    
+            // Check if the input value is 'y' or 'n' and the last command was 'lightmode'
+            if (value === 'y' || value === 'n') {
+                if (commandHistory[commandHistory.length - 1]?.toLowerCase() === 'lightmode') {
+                    // Print GIF based on input value
+                    const gifURL = value === 'y' ? 'https://media.giphy.com/media/1zSz5MVw4zKg0/giphy.gif?cid=790b7611gq18l9576gzg4vpvbvqyy6h91c6481x6r21gfwnu&ep=v1_gifs_search&rid=giphy.gif&ct=g' : 'https://media.giphy.com/media/NEvPzZ8bd1V4Y/giphy.gif?cid=790b7611a6mrdvhczzwyjdxyqiygxixhn9jbdjajenw2nln5&ep=v1_gifs_search&rid=giphy.gif&ct=g';
+                    setOutputContent([...outputContent, <img src={gifURL} alt="GIF" style={{ height: '200px' }} />]);
+    
+                    // Clear the input value
+                    setInputValue('');
+                }
+            }
+        };
+    
         document.addEventListener('keydown', handleKeyPress);
+        inputRef.current.addEventListener('input', handleInputChange);
     
         // Function to handle clicks outside the terminal
         const handleClickOutside = (event) => {
@@ -146,9 +210,12 @@ function Terminal() {
         // Clean up by removing the event listeners when the component unmounts
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
+            inputRef.current.removeEventListener('input', handleInputChange);
             document.removeEventListener('click', handleClickOutside);
         };
-    }, []);
+    }, [commandHistory, inputValue]);
+    
+    
 
     return (
         <div className="terminal" ref={terminalRef}>
