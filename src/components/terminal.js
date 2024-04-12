@@ -165,7 +165,6 @@ function Terminal() {
                     'github --open',
                     'linkedin --open',
                     'help'
-                    // Add more commands as needed
                 ];
     
                 // Find the longest common prefix among suggestions and current input value
@@ -207,15 +206,22 @@ function Terminal() {
         // Add event listener for clicks outside the terminal
         document.addEventListener('click', handleClickOutside);
     
+        // Handle touch events to close keyboard on mobile
+        const handleTouchEnd = () => {
+            inputRef.current.blur(); // Blur the input element to close the keyboard
+        };
+    
+        // Add event listener for touch end events
+        document.addEventListener('touchend', handleTouchEnd);
+    
         // Clean up by removing the event listeners when the component unmounts
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
             inputRef.current.removeEventListener('input', handleInputChange);
             document.removeEventListener('click', handleClickOutside);
+            document.removeEventListener('touchend', handleTouchEnd);
         };
     }, [commandHistory, inputValue]);
-    
-    
 
     return (
         <div className="terminal" ref={terminalRef}>
